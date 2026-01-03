@@ -1,0 +1,64 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+    padding: 0 20px;
+}
+
+/* Hero / Header */
+.hero {
+    text-align: center;
+    padding: 60px 0;
+    background: #3366cc;
+    color: white;
+}
+
+.hero span {
+    color: #ffeb3b;
+}
+
+/* Sections */
+section {
+    margin: 40px 0;
+}
+
+section h2 {
+    font-size: 24px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+#skills ul {
+    list-style-type: square;
+    margin-left: 20px;
+}
+
+#skills li {
+    padding: 4px 0;
+}
+
+/* Contact */
+#contact a {
+    color: #3366cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 14px;
+    color: #777;
+}
+
