@@ -10,121 +10,204 @@
 
   <style>
     body {
-      background: linear-gradient(#c8f7c5, #fef9c3);
+      background: linear-gradient(135deg, #ffecd2, #fcb69f, #a1ffce);
+      min-height: 100vh;
     }
 
     #village {
       position: relative;
-      height: 500px;
-      border: 3px solid #198754;
-      border-radius: 16px;
+      height: 520px;
+      border-radius: 20px;
+      background: linear-gradient(#87ceeb 60%, #4caf50 40%);
       overflow: hidden;
-      background: #eafaf1;
     }
 
+    /* Village decorations */
+    .decor {
+      position: absolute;
+      font-size: 48px;
+    }
+
+    /* Houses */
     .house {
       position: absolute;
-      width: 70px;
-      height: 60px;
-      background: #dc3545;
-      border-radius: 8px 8px 4px 4px;
       cursor: pointer;
+      font-size: 48px;
     }
 
-    .house::after {
-      content: "🏠";
-      font-size: 36px;
-      position: absolute;
-      top: 10px;
-      left: 16px;
-    }
-
-    .character {
+    /* Walkers */
+    .walker {
       position: absolute;
       font-size: 36px;
-      animation: move 10s linear infinite;
+      animation: walk 16s linear infinite;
     }
 
-    @keyframes move {
-      from { left: -50px; }
+    @keyframes walk {
+      from { left: -60px; }
       to { left: 100%; }
     }
 
+    /* Child */
     .child {
       position: absolute;
       font-size: 32px;
-      animation: pop 0.6s ease;
+      animation: pop 0.6s ease-out;
     }
 
     @keyframes pop {
       from { transform: scale(0); }
       to { transform: scale(1); }
     }
+
+    /* Celebration */
+    .celebrate {
+      animation: bounce 0.8s ease;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
 
-<div class="container py-4">
-  <h3 class="text-center mb-3">🇮🇳 Indian Village – Fun Math Game</h3>
-  <p class="text-center">Click on any house. A child will come out and ask a math question!</p>
+<div class="container py-3">
+  <h3 class="text-center">🇮🇳 Indian Village Math Adventure</h3>
 
-  <div id="village" class="mb-4">
-    <!-- Houses -->
-    <div class="house" style="top: 300px; left: 50px;"></div>
-    <div class="house" style="top: 320px; left: 180px;"></div>
-    <div class="house" style="top: 310px; left: 320px;"></div>
-    <div class="house" style="top: 330px; left: 460px;"></div>
-
-    <!-- Moving animals & people -->
-    <div class="character" style="top: 60px; animation-duration: 12s;">🐄</div>
-    <div class="character" style="top: 120px; animation-duration: 9s;">🐐</div>
-    <div class="character" style="top: 180px; animation-duration: 11s;">🧑🏽‍🌾</div>
-    <div class="character" style="top: 240px; animation-duration: 8s;">👳🏽‍♂️</div>
-    <div class="character" style="top: 200px; animation-duration: 10s;">🦚</div>
+  <div class="d-flex justify-content-between flex-wrap text-center my-2">
+    <div>⭐ Score: <span id="score">0</span></div>
+    <div>⏱️ Time: <span id="timer">10</span>s</div>
+    <div>🧮 Level: <span id="level">Easy</span></div>
   </div>
 
-  <div id="questionBox" class="alert alert-info text-center d-none"></div>
+  <div id="village" class="mb-3">
+    <!-- Decorations -->
+    <div class="decor" style="left:20px; top:20px">☀️</div>
+    <div class="decor" style="right:20px; top:40px">☁️</div>
+    <div class="decor" style="left:80px; top:260px">🌳</div>
+    <div class="decor" style="right:100px; top:260px">🌴</div>
+    <div class="decor" style="left:260px; top:280px">🛕</div>
+
+    <!-- Houses -->
+    <div class="house" style="left:60px; top:350px">🏠</div>
+    <div class="house" style="left:200px; top:360px">🏠</div>
+    <div class="house" style="left:350px; top:355px">🏠</div>
+    <div class="house" style="left:500px; top:365px">🏠</div>
+
+    <!-- Walkers -->
+    <div class="walker" style="top:250px; animation-duration:18s">🐄</div>
+    <div class="walker" style="top:290px; animation-duration:20s">🐐</div>
+    <div class="walker" style="top:220px; animation-duration:17s">🦚</div>
+    <div class="walker" style="top:190px; animation-duration:16s">🧑🏽‍🌾</div>
+    <div class="walker" style="top:210px; animation-duration:15s">👳🏽‍♂️</div>
+  </div>
+
+  <div id="mathBox" class="card shadow p-3 d-none">
+    <div class="card-body text-center">
+      <h5 id="question"></h5>
+      <input type="number" id="answer" class="form-control form-control-lg my-2 text-center" placeholder="Your Answer">
+      <button class="btn btn-success btn-lg w-100" onclick="checkAnswer()">Submit</button>
+      <div id="feedback" class="mt-2 fw-bold"></div>
+    </div>
+  </div>
 </div>
+
+<!-- Sounds -->
+<audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
 
 <script>
   const houses = document.querySelectorAll('.house');
-  const questionBox = document.getElementById('questionBox');
+  const village = document.getElementById('village');
+  const questionEl = document.getElementById('question');
+  const feedback = document.getElementById('feedback');
+  const scoreEl = document.getElementById('score');
+  const timerEl = document.getElementById('timer');
+  const levelEl = document.getElementById('level');
 
-  function randomMath() {
-    const a = Math.floor(Math.random() * 9) + 1;
-    const b = Math.floor(Math.random() * 9) + 1;
+  let correctAnswer = 0;
+  let score = 0;
+  let timeLeft = 10;
+  let timer;
+  let level = 'Easy';
+
+  function speak(text) {
+    const msg = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(msg);
+  }
+
+  function generateMath() {
+    let max = level === 'Easy' ? 9 : level === 'Medium' ? 15 : 20;
+    const a = Math.floor(Math.random() * max) + 1;
+    const b = Math.floor(Math.random() * max) + 1;
     const ops = ['+', '-', '×'];
     const op = ops[Math.floor(Math.random() * ops.length)];
 
-    let answer;
-    if (op === '+') answer = a + b;
-    if (op === '-') answer = a - b;
-    if (op === '×') answer = a * b;
+    if (op === '+') correctAnswer = a + b;
+    if (op === '-') correctAnswer = a - b;
+    if (op === '×') correctAnswer = a * b;
 
-    return { question: `${a} ${op} ${b} = ?`, answer };
+    const q = `${a} ${op} ${b}`;
+    questionEl.textContent = `🧒 Solve: ${q}`;
+    speak(`Solve ${a} ${op === '×' ? 'times' : op} ${b}`);
+
+    startTimer();
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timeLeft = 10;
+    timerEl.textContent = timeLeft;
+
+    timer = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        feedback.textContent = '⏰ Time up!';
+        document.getElementById('wrongSound').play();
+      }
+    }, 1000);
   }
 
   houses.forEach(house => {
     house.addEventListener('click', () => {
-      // Remove old child
-      const oldChild = document.querySelector('.child');
-      if (oldChild) oldChild.remove();
+      document.querySelectorAll('.child').forEach(c => c.remove());
 
-      // Child comes out
       const child = document.createElement('div');
       child.className = 'child';
       child.textContent = '🧒🏽';
       child.style.left = house.style.left;
       child.style.top = (parseInt(house.style.top) - 40) + 'px';
+      village.appendChild(child);
 
-      document.getElementById('village').appendChild(child);
+      document.getElementById('mathBox').classList.remove('d-none');
+      document.getElementById('answer').value = '';
+      feedback.textContent = '';
 
-      // Math question
-      const math = randomMath();
-      questionBox.classList.remove('d-none');
-      questionBox.innerHTML = `👦 Child asks: <strong>${math.question}</strong>`;
+      generateMath();
     });
   });
+
+  function checkAnswer() {
+    const userAnswer = parseInt(document.getElementById('answer').value);
+    if (userAnswer === correctAnswer) {
+      score += 10;
+      scoreEl.textContent = score;
+      feedback.textContent = '🎉 Correct!';
+      feedback.classList.add('celebrate');
+      document.getElementById('correctSound').play();
+
+      if (score >= 50 && level === 'Easy') level = 'Medium';
+      if (score >= 100 && level === 'Medium') level = 'Hard';
+      levelEl.textContent = level;
+    } else {
+      feedback.textContent = '❌ Try again';
+      document.getElementById('wrongSound').play();
+    }
+  }
 </script>
 
 </body>
