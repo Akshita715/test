@@ -1,212 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Indian Village Math Game</title>
+  <meta charset="UTF-8">
+  <title>Interactive Skeleton Anatomy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap 5 CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     body {
-      background: linear-gradient(135deg, #ffecd2, #fcb69f, #a1ffce);
-      min-height: 100vh;
+      background-color: #f8f9fa;
     }
-
-    #village {
-      position: relative;
-      height: 520px;
-      border-radius: 20px;
-      background: linear-gradient(#87ceeb 60%, #4caf50 40%);
-      overflow: hidden;
-    }
-
-    /* Village decorations */
-    .decor {
-      position: absolute;
-      font-size: 48px;
-    }
-
-    /* Houses */
-    .house {
-      position: absolute;
+    .bone {
+      fill: rgba(0, 123, 255, 0.2);
+      stroke: #0d6efd;
+      stroke-width: 1;
       cursor: pointer;
-      font-size: 48px;
     }
-
-    /* Walkers */
-    .walker {
-      position: absolute;
-      font-size: 36px;
-      animation: walk 16s linear infinite;
+    .bone:hover {
+      fill: rgba(0, 123, 255, 0.5);
     }
-
-    @keyframes walk {
-      from { left: -60px; }
-      to { left: 100%; }
-    }
-
-    /* Child */
-    .child {
-      position: absolute;
-      font-size: 32px;
-      animation: pop 0.6s ease-out;
-    }
-
-    @keyframes pop {
-      from { transform: scale(0); }
-      to { transform: scale(1); }
-    }
-
-    /* Celebration */
-    .celebrate {
-      animation: bounce 0.8s ease;
-    }
-
-    @keyframes bounce {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
+    #boneName {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0d6efd;
     }
   </style>
 </head>
 <body>
 
-<div class="container py-3">
-  <h3 class="text-center">🇮🇳 Indian Village Math Adventure</h3>
-
-  <div class="d-flex justify-content-between flex-wrap text-center my-2">
-    <div>⭐ Score: <span id="score">0</span></div>
-    <div>⏱️ Time: <span id="timer">10</span>s</div>
-    <div>🧮 Level: <span id="level">Easy</span></div>
+<div class="container py-4">
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">🦴 Interactive Skeleton Anatomy</h1>
+    <p class="text-muted">Touch / Click a bone to see and hear its name</p>
   </div>
 
-  <div id="village" class="mb-3">
-    <!-- Decorations -->
-    <div class="decor" style="left:20px; top:20px">☀️</div>
-    <div class="decor" style="right:20px; top:40px">☁️</div>
-    <div class="decor" style="left:80px; top:260px">🌳</div>
-    <div class="decor" style="right:100px; top:260px">🌴</div>
-    <div class="decor" style="left:260px; top:280px">🛕</div>
+  <div class="row">
+    <div class="col-md-8 text-center">
+      <!-- Skeleton SVG -->
+      <svg viewBox="0 0 200 500" width="100%" height="500">
 
-    <!-- Houses -->
-    <div class="house" style="left:60px; top:350px">🏠</div>
-    <div class="house" style="left:200px; top:360px">🏠</div>
-    <div class="house" style="left:350px; top:355px">🏠</div>
-    <div class="house" style="left:500px; top:365px">🏠</div>
+        <!-- Skull -->
+        <circle class="bone" cx="100" cy="40" r="25"
+          onclick="showBone('Skull')" />
 
-    <!-- Walkers -->
-    <div class="walker" style="top:250px; animation-duration:18s">🐄</div>
-    <div class="walker" style="top:290px; animation-duration:20s">🐐</div>
-    <div class="walker" style="top:220px; animation-duration:17s">🦚</div>
-    <div class="walker" style="top:190px; animation-duration:16s">🧑🏽‍🌾</div>
-    <div class="walker" style="top:210px; animation-duration:15s">👳🏽‍♂️</div>
-  </div>
+        <!-- Spine -->
+        <rect class="bone" x="95" y="70" width="10" height="120"
+          onclick="showBone('Vertebral Column')" />
 
-  <div id="mathBox" class="card shadow p-3 d-none">
-    <div class="card-body text-center">
-      <h5 id="question"></h5>
-      <input type="number" id="answer" class="form-control form-control-lg my-2 text-center" placeholder="Your Answer">
-      <button class="btn btn-success btn-lg w-100" onclick="checkAnswer()">Submit</button>
-      <div id="feedback" class="mt-2 fw-bold"></div>
+        <!-- Rib Cage -->
+        <ellipse class="bone" cx="100" cy="130" rx="35" ry="30"
+          onclick="showBone('Rib Cage')" />
+
+        <!-- Pelvis -->
+        <ellipse class="bone" cx="100" cy="210" rx="30" ry="20"
+          onclick="showBone('Pelvis')" />
+
+        <!-- Left Arm -->
+        <rect class="bone" x="50" y="90" width="10" height="90"
+          onclick="showBone('Humerus')" />
+
+        <!-- Right Arm -->
+        <rect class="bone" x="140" y="90" width="10" height="90"
+          onclick="showBone('Humerus')" />
+
+        <!-- Left Leg -->
+        <rect class="bone" x="85" y="240" width="10" height="120"
+          onclick="showBone('Femur')" />
+
+        <!-- Right Leg -->
+        <rect class="bone" x="105" y="240" width="10" height="120"
+          onclick="showBone('Femur')" />
+
+      </svg>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <p class="text-muted">Selected Bone</p>
+          <div id="boneName">None</div>
+          <button class="btn btn-primary mt-3" onclick="speakBone()">
+            🔊 Pronounce
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Sounds -->
-<audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-<audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
-
 <script>
-  const houses = document.querySelectorAll('.house');
-  const village = document.getElementById('village');
-  const questionEl = document.getElementById('question');
-  const feedback = document.getElementById('feedback');
-  const scoreEl = document.getElementById('score');
-  const timerEl = document.getElementById('timer');
-  const levelEl = document.getElementById('level');
+  let currentBone = "";
 
-  let correctAnswer = 0;
-  let score = 0;
-  let timeLeft = 10;
-  let timer;
-  let level = 'Easy';
-
-  function speak(text) {
-    const msg = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(msg);
+  function showBone(boneName) {
+    currentBone = boneName;
+    document.getElementById("boneName").innerText = boneName;
+    speakBone();
   }
 
-  function generateMath() {
-    let max = level === 'Easy' ? 9 : level === 'Medium' ? 15 : 20;
-    const a = Math.floor(Math.random() * max) + 1;
-    const b = Math.floor(Math.random() * max) + 1;
-    const ops = ['+', '-', '×'];
-    const op = ops[Math.floor(Math.random() * ops.length)];
+  function speakBone() {
+    if (!currentBone) return;
 
-    if (op === '+') correctAnswer = a + b;
-    if (op === '-') correctAnswer = a - b;
-    if (op === '×') correctAnswer = a * b;
-
-    const q = `${a} ${op} ${b}`;
-    questionEl.textContent = `🧒 Solve: ${q}`;
-    speak(`Solve ${a} ${op === '×' ? 'times' : op} ${b}`);
-
-    startTimer();
-  }
-
-  function startTimer() {
-    clearInterval(timer);
-    timeLeft = 10;
-    timerEl.textContent = timeLeft;
-
-    timer = setInterval(() => {
-      timeLeft--;
-      timerEl.textContent = timeLeft;
-      if (timeLeft === 0) {
-        clearInterval(timer);
-        feedback.textContent = '⏰ Time up!';
-        document.getElementById('wrongSound').play();
-      }
-    }, 1000);
-  }
-
-  houses.forEach(house => {
-    house.addEventListener('click', () => {
-      document.querySelectorAll('.child').forEach(c => c.remove());
-
-      const child = document.createElement('div');
-      child.className = 'child';
-      child.textContent = '🧒🏽';
-      child.style.left = house.style.left;
-      child.style.top = (parseInt(house.style.top) - 40) + 'px';
-      village.appendChild(child);
-
-      document.getElementById('mathBox').classList.remove('d-none');
-      document.getElementById('answer').value = '';
-      feedback.textContent = '';
-
-      generateMath();
-    });
-  });
-
-  function checkAnswer() {
-    const userAnswer = parseInt(document.getElementById('answer').value);
-    if (userAnswer === correctAnswer) {
-      score += 10;
-      scoreEl.textContent = score;
-      feedback.textContent = '🎉 Correct!';
-      feedback.classList.add('celebrate');
-      document.getElementById('correctSound').play();
-
-      if (score >= 50 && level === 'Easy') level = 'Medium';
-      if (score >= 100 && level === 'Medium') level = 'Hard';
-      levelEl.textContent = level;
-    } else {
-      feedback.textContent = '❌ Try again';
-      document.getElementById('wrongSound').play();
-    }
+    const speech = new SpeechSynthesisUtterance(currentBone);
+    speech.lang = "en-US";
+    speech.rate = 0.9;
+    window.speechSynthesis.speak(speech);
   }
 </script>
 
